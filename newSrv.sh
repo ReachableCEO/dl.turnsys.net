@@ -109,7 +109,10 @@ curl -s http://dl.turnsys.net/nsswitch.conf > /etc/nsswitch.conf
 if [ ! -d /root/.ssh ]; then 
 mkdir /root/.ssh/
 fi 
+
+if [ ! -L /root/.ssh/authorized_keys ]; then
 curl -s http://dl.turnsys.net/ssh-authorized-keys > /root/.ssh/authorized_keys ; chmod 400 /root/.ssh/authorized_keys
+fi
 
 echo "Completed running $FUNCNAME"
 
@@ -141,8 +144,8 @@ export DEBIAN_FRONTEND="noninteractive" && apt-get -qq --yes -o Dpkg::Options::=
 
 MAIL_HOST="$(hostname -f)"
 debconf-set-selections <<< "postfix postfix/mailname string $MAIL_HOST"
-debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet with smarthost'"
-debconf-set-selections <<< "postfix postfix/relayhost string 'pfv-toolbox.turnsys.net'"
+debconf-set-selections <<< "postfix postfix/main_mailer_type string Internet with smarthost"
+debconf-set-selections <<< "postfix postfix/relayhost string pfv-toolbox.turnsys.net"
 
 export DEBIAN_FRONTEND="noninteractive" && apt-get -qq --yes -o Dpkg::Options::="--force-confold" install \
 htop  \
@@ -151,7 +154,6 @@ snmpd  \
 ncdu \
 iftop \
 acct \
-glances \
 nethogs \
 sysstat \
 ngrep \

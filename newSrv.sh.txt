@@ -109,7 +109,10 @@ curl -s http://dl.turnsys.net/nsswitch.conf > /etc/nsswitch.conf
 if [ ! -d /root/.ssh ]; then 
 mkdir /root/.ssh/
 fi 
+
+if [ ! -L /root/.ssh/authorized_keys ]; then
 curl -s http://dl.turnsys.net/ssh-authorized-keys > /root/.ssh/authorized_keys ; chmod 400 /root/.ssh/authorized_keys
+fi
 
 echo "Completed running $FUNCNAME"
 
@@ -151,7 +154,6 @@ snmpd  \
 ncdu \
 iftop \
 acct \
-glances \
 nethogs \
 sysstat \
 ngrep \
