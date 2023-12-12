@@ -190,9 +190,8 @@ telnet \
 postfix \
 webmin 
 
-
 bash <(curl -Ss https://my-netdata.io/kickstart.sh) --dont-wait
-cp netdata-stream.conf /etc/netdata/stream.conf  && systemctl stop netdata && systemctl start netdata
+cp netdata-stream.conf /opt/netdata/etc/netdata && systemctl stop netdata && systemctl start netdata
 
 echo "Completed running $FUNCNAME"
 
