@@ -51,7 +51,6 @@ function global-shellScripts()
 echo "Now running $FUNCNAME...."
 
 cp distro /usr/local/bin/distro && chmod +x /usr/local/bin/distro
-cp upsnotify.sh /usr/local/bin/upsnotify.sh && chmod +x /usr/local/bin/upsnotify.sh
 cp up2date.sh /usr/local/bin/up2date.sh && chmod +x /usr/local/bin/up2date.sh
 
 echo "Completed running $FUNCNAME"
