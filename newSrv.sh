@@ -34,7 +34,7 @@ function global-configureAptRepos()
 echo "Now running $FUNCNAME...."
 
 echo "deb http://download.webmin.com/download/repository sarge contrib" > /etc/apt/sources.list.d/webmin.list
-curl --insecure -s https://www.webmin.com/jcameron-key.asc | gpg --dearmor >/etc/apt/trusted.gpg.d/jcameron-key.gpg 
+curl --insecure -s https://webmin.com/jcameron-key.asc | gpg --dearmor >/etc/apt/trusted.gpg.d/jcameron-key.gpg 
 
 echo "deb https://packages.cisofy.com/community/lynis/deb/ stable main" > /etc/apt/sources.list.d/cisofy-lynis.list
 curl --insecure -s https://packages.cisofy.com/keys/cisofy-software-public.key | apt-key add -
