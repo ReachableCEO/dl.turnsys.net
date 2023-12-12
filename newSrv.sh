@@ -50,9 +50,9 @@ function global-shellScripts()
 
 echo "Now running $FUNCNAME...."
 
-curl -s http://dl.turnsys.net/distro > /usr/local/bin/distro ; chmod +x /usr/local/bin/distro
-curl -s http://dl.turnsys.net/upsnotify.sh > /usr/local/bin/upsnotify.sh ; chmod +x /usr/local/bin/upsnotify.sh
-curl -s http://dl.turnsys.net/up2date.sh > /usr/local/bin/up2date.sh ; chmod +x /usr/local/bin/up2date.sh
+cp distro /usr/local/bin/distro && chmod +x /usr/local/bin/distro
+cp upsnotify.sh /usr/local/bin/upsnotify.sh && chmod +x /usr/local/bin/upsnotify.sh
+cp up2date.sh /usr/local/bin/up2date.sh && chmod +x /usr/local/bin/up2date.sh
 
 echo "Completed running $FUNCNAME"
 
@@ -63,9 +63,8 @@ function global-profileScripts()
 
 echo "Now running $FUNCNAME...."
 
-curl -s http://dl.turnsys.net/profiled-tsys-shell.sh > /etc/profile.d/tsys-shell.sh
-curl -s http://dl.turnsys.net/profiled-tmux.sh > /etc/profile.d/tmux.sh
-curl -s http://dl.turnsys.net/profiled-notify-discord.sh > /etc/profile.d/login-notify-discord.sh
+cp profiled-tsys-shell.sh /etc/profile.d/tsys-shell.sh
+cp profiled-tmux.sh /etc/profile.d/tmux.sh
 
 echo "Completed running $FUNCNAME"
 
@@ -79,8 +78,8 @@ function global-oam()
 echo "Now running $FUNCNAME...."
 
 rm -rf /usr/local/librenms-agent
-curl -s http://dl.turnsys.net/librenms.tar.gz > /usr/local/librenms.tar.gz
-cd /usr/local ; tar xfz librenms.tar.gz ; rm -f /usr/local/librenms.tar.gz
+cp librenms.tar.gz /usr/local/librenms.tar.gz
+cd /usr/local && tar xfz librenms.tar.gz && rm -f /usr/local/librenms.tar.gz
 
 echo "Completed running $FUNCNAME"
 
@@ -88,9 +87,9 @@ echo "Completed running $FUNCNAME"
 
 
 if [[ ! -f /root/ntpserver ]]; then
-curl -s http://dl.turnsys.net/ntp.conf > /etc/ntp.conf 
+cp ntp.conf /etc/ntp.conf 
 export DEBIAN_FRONTEND="noninteractive" && apt-get -qq --yes -o Dpkg::Options::="--force-confold" install ntp ntpdate
-systemctl stop ntp ; ntpdate pfv-dc-02.turnsys.net ; systemctl start ntp
+systemctl stop ntp && ntpdate pfv-dc-02.turnsys.net && systemctl start ntp
 fi
 
 function global-systemServiceConfigurationFiles()
@@ -100,10 +99,13 @@ function global-systemServiceConfigurationFiles()
 echo "Now running $FUNCNAME...."
 
 
-curl -s http://dl.turnsys.net/aliases > /etc/aliases 
-curl -s http://dl.turnsys.net/rsyslog.conf > /etc/rsyslog.conf
+cp aliases /etc/aliases 
+cp rsyslog.conf /etc/rsyslog.conf
+
+#Need to root cause why this breaks DNS.... look in legacy code to find DNS handle/fix bits and merge here...
 #curl -s http://dl.turnsys.net/resolv.conf > /etc/resolv.conf
-curl -s http://dl.turnsys.net/nsswitch.conf > /etc/nsswitch.conf
+
+cp nsswitch.conf /etc/nsswitch.conf
 
 
 if [ ! -d /root/.ssh ]; then 
@@ -111,7 +113,7 @@ mkdir /root/.ssh/
 fi 
 
 if [ ! -L /root/.ssh/authorized_keys ]; then
-curl -s http://dl.turnsys.net/ssh-authorized-keys > /root/.ssh/authorized_keys ; chmod 400 /root/.ssh/authorized_keys
+cp ssh-authorized-keys /root/.ssh/authorized_keys && chmod 400 /root/.ssh/authorized_keys
 fi
 
 echo "Completed running $FUNCNAME"
@@ -190,7 +192,7 @@ webmin
 
 
 bash <(curl -Ss https://my-netdata.io/kickstart.sh) --dont-wait
-curl -s http://dl.turnsys.net/netdata-stream.conf > /etc/netdata/stream.conf  ; systemctl stop netdata ; systemctl start netdata
+cp netdata-stream.conf /etc/netdata/stream.conf  && systemctl stop netdata && systemctl start netdata
 
 echo "Completed running $FUNCNAME"
 
@@ -203,12 +205,12 @@ function global-postPackageConfiguration()
 echo "Now running $FUNCNAME...."
 
 ###Post package deployment bits
-systemctl stop snmpd  ; /etc/init.d/snmpd stop
+systemctl stop snmpd  && /etc/init.d/snmpd stop
 sed -i "s|-Lsd|-LS6d|" /lib/systemd/system/snmpd.service 
-curl -s http://dl.turnsys.net/snmpd.conf > /etc/snmp/snmpd.conf
-systemctl daemon-reload ; systemctl restart  snmpd ; /etc/init.d/snmpd restart
+cp snmpd.conf /etc/snmp/snmpd.conf
+systemctl daemon-reload && systemctl restart  snmpd && /etc/init.d/snmpd restart
 
-/etc/init.d/rsyslog stop ; /etc/init.d/rsyslog start ; logger "hi hi from $(hostname)"
+/etc/init.d/rsyslog stop && /etc/init.d/rsyslog start && logger "hi hi from $(hostname)"
 
 systemctl restart ntp 
 systemctl restart postfix
