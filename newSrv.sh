@@ -210,7 +210,7 @@ sed -i "s|-Lsd|-LS6d|" /lib/systemd/system/snmpd.service
 cp snmpd.conf /etc/snmp/snmpd.conf
 systemctl daemon-reload && systemctl restart  snmpd && /etc/init.d/snmpd restart
 
-/etc/init.d/rsyslog stop && /etc/init.d/rsyslog start && logger "hi hi from $(hostname)"
+systemctl stop rsyslog && systemctl start rsyslog && logger "hi hi from $(hostname)"
 
 systemctl restart ntp 
 systemctl restart postfix
