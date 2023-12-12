@@ -79,6 +79,7 @@ echo "Now running $FUNCNAME...."
 rm -rf /usr/local/librenms-agent
 cp librenms.tar.gz /usr/local/librenms.tar.gz
 cd /usr/local && tar xfz librenms.tar.gz && rm -f /usr/local/librenms.tar.gz
+cd -
 
 echo "Completed running $FUNCNAME"
 
